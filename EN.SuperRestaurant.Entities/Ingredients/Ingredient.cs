@@ -11,6 +11,6 @@ namespace EN.SuperRestaurant.Entities.Ingredients
         [Column(TypeName = "decimal(4, 2)")]
         public decimal Price { get; set; }
 
-        public List<Meal> Meals { get; set; }
+        public List<Meal> Meals { get; set; } = [];
     }
 }

@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\EN.SuperRestaurant.Utils\EN.SuperRestaurant.Utils.csproj" />
-  </ItemGroup>
-
 </Project>
