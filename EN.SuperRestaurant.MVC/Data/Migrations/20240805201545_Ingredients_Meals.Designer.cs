@@ -4,6 +4,7 @@ using EN.SuperRestaurant.MVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EN.SuperRestaurant.MVC.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240805201545_Ingredients_Meals")]
+    partial class Ingredients_Meals
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +42,7 @@ namespace EN.SuperRestaurant.MVC.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredients", (string)null);
+                    b.ToTable("Ingredients");
                 });
 
             modelBuilder.Entity("EN.SuperRestaurant.Entities.Meals.Meal", b =>
@@ -63,7 +66,7 @@ namespace EN.SuperRestaurant.MVC.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Meals", (string)null);
+                    b.ToTable("Meals");
                 });
 
             modelBuilder.Entity("IngredientMeal", b =>
@@ -78,7 +81,7 @@ namespace EN.SuperRestaurant.MVC.Data.Migrations
 
                     b.HasIndex("MealsId");
 
-                    b.ToTable("IngredientMeal", (string)null);
+                    b.ToTable("IngredientMeal");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
