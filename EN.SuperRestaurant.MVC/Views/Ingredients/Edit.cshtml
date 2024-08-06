@@ -1,39 +1,57 @@
 ﻿@model EN.SuperRestaurant.Entities.Ingredients.Ingredient
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Ingredient";
 }
 
-<h1>Edit</h1>
+<div class="container">
 
-<h4>Ingredient</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <h1>
+        Edit Ingredient
+        <span class="text-primary">@Model.Name</span>
+    </h1>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Name" class="form-control" placeholder="Name" />
+                        <label asp-for="Name" class="control-label"></label>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="form-group mt-2">
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Price" class="form-control" placeholder="Price" />
+                        <label asp-for="Price" class="control-label"></label>
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <div class="form-group mt-4">
+                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                    <input type="submit" value="Save" class="btn btn-primary ms-2" />
+                </div>
+
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
