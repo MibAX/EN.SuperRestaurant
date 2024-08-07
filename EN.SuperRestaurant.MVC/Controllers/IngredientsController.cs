@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using EN.SuperRestaurant.Entities.Ingredients;
 using EN.SuperRestaurant.MVC.Data;
+using AutoMapper;
+using EN.SuperRestaurant.MVC.Models.Ingredients;
 
 namespace EN.SuperRestaurant.MVC.Controllers
 {
@@ -10,10 +12,12 @@ namespace EN.SuperRestaurant.MVC.Controllers
         #region Data & Const
 
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public IngredientsController(ApplicationDbContext context)
+        public IngredientsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         #endregion
@@ -23,7 +27,13 @@ namespace EN.SuperRestaurant.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Ingredients.ToListAsync());
+            var ingredients = await _context
+                                        .Ingredients
+                                        .ToListAsync();
+
+            var ingredientVMs = _mapper.Map<List<IngredientViewModel>>(ingredients);
+
+            return View(ingredientVMs);
         }
 
         [HttpGet]
@@ -34,14 +44,18 @@ namespace EN.SuperRestaurant.MVC.Controllers
                 return NotFound();
             }
 
-            var ingredient = await _context.Ingredients
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var ingredient = await _context
+                                        .Ingredients
+                                        .FindAsync(id);
+
             if (ingredient == null)
             {
                 return NotFound();
             }
 
-            return View(ingredient);
+            var ingredientVM = _mapper.Map<IngredientDetailsViewModel>(ingredient);
+
+            return View(ingredientVM);
         }
 
         [HttpGet]
@@ -52,15 +66,19 @@ namespace EN.SuperRestaurant.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Ingredient ingredient)
+        public async Task<IActionResult> Create(CreateUpdateIngredientViewModel createUpdateIngredientVM)
         {
             if (ModelState.IsValid)
             {
+                var ingredient = _mapper.Map<Ingredient>(createUpdateIngredientVM);
+
                 _context.Add(ingredient);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(ingredient);
+
+            return View(createUpdateIngredientVM);
         }
 
         [HttpGet]
@@ -71,25 +89,33 @@ namespace EN.SuperRestaurant.MVC.Controllers
                 return NotFound();
             }
 
-            var ingredient = await _context.Ingredients.FindAsync(id);
+            var ingredient = await _context
+                                    .Ingredients
+                                    .FindAsync(id);
+
             if (ingredient == null)
             {
                 return NotFound();
             }
-            return View(ingredient);
+
+            var createUpdateIngredientVM = _mapper.Map<CreateUpdateIngredientViewModel>(ingredient);
+
+            return View(createUpdateIngredientVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Ingredient ingredient)
+        public async Task<IActionResult> Edit(int id, CreateUpdateIngredientViewModel createUpdateIngredientVM)
         {
-            if (id != ingredient.Id)
+            if (id != createUpdateIngredientVM.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var ingredient = _mapper.Map<Ingredient>(createUpdateIngredientVM);
+
                 try
                 {
                     _context.Update(ingredient);
@@ -97,7 +123,7 @@ namespace EN.SuperRestaurant.MVC.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!IngredientExists(ingredient.Id))
+                    if (!IngredientExists(createUpdateIngredientVM.Id))
                     {
                         return NotFound();
                     }
@@ -106,22 +132,29 @@ namespace EN.SuperRestaurant.MVC.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(ingredient);
+
+            return View(createUpdateIngredientVM);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ingredient = await _context.Ingredients.FindAsync(id);
-            if (ingredient != null)
+            var ingredient = await _context
+                                    .Ingredients
+                                    .FindAsync(id);
+
+            if (ingredient == null)
             {
-                _context.Ingredients.Remove(ingredient);
+                return NotFound();
             }
 
+            _context.Ingredients.Remove(ingredient);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -132,7 +165,7 @@ namespace EN.SuperRestaurant.MVC.Controllers
         private bool IngredientExists(int id)
         {
             return _context.Ingredients.Any(e => e.Id == id);
-        } 
+        }
 
         #endregion
     }

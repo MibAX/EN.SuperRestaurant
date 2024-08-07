@@ -18,6 +18,8 @@ namespace EN.SuperRestaurant.MVC
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            builder.Services.AddAutoMapper(typeof(Program));
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
