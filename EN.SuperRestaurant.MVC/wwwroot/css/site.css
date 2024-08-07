@@ -20,3 +20,11 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/*#region Data Tables Overrides */
+
+.dt-input {
+    margin-right: 0.5rem !important;
+}
+
+/*#endregion */
