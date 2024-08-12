@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using EN.SuperRestaurant.Entities.Meals;
 using EN.SuperRestaurant.MVC.Data;
 using AutoMapper;
+using EN.SuperRestaurant.MVC.Models.Meals;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using EN.SuperRestaurant.Entities.Ingredients;
 
 namespace EN.SuperRestaurant.MVC.Controllers
 {
@@ -25,7 +28,13 @@ namespace EN.SuperRestaurant.MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Meals.ToListAsync());
+            var meals = await _context
+                                .Meals
+                                .ToListAsync();
+
+            var mealVMs = _mapper.Map<List<MealViewModel>>(meals);
+
+            return View(mealVMs);
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -47,22 +56,35 @@ namespace EN.SuperRestaurant.MVC.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var createUpdateMealVM = new CreateUpdateMealViewModel();
+            createUpdateMealVM.IngredientLookup = new MultiSelectList(_context.Ingredients, "Id", "Name");
+
+            return View(createUpdateMealVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price")] Meal meal)
+        public async Task<IActionResult> Create(CreateUpdateMealViewModel createUpdateMealViewModel)
         {
             if (ModelState.IsValid)
             {
+                // Transform createUpdateMealViewModel -> Meal
+                var meal = _mapper.Map<Meal>(createUpdateMealViewModel);
+
+                // Update Meal Ingredients
+                await UpdateMealIngredients(meal, createUpdateMealViewModel.IngredientIds);
+
+                // Update Meal Price
+                meal.Price = await GetMealPrice(meal.Ingredients);
+
                 _context.Add(meal);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(meal);
-        }
 
+            return View(createUpdateMealViewModel);
+        }
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -131,7 +153,30 @@ namespace EN.SuperRestaurant.MVC.Controllers
         private bool MealExists(int id)
         {
             return _context.Meals.Any(e => e.Id == id);
-        } 
+        }
+
+        private async Task UpdateMealIngredients(Meal meal, List<int> ingredientIds)
+        {
+            // Clear meal ingredients
+            meal.Ingredients.Clear();
+
+            // Get ingredients from DB using the ingredientIds
+            var ingredients = await _context
+                                        .Ingredients
+                                        .Where(ingredient => ingredientIds.Contains(ingredient.Id))
+                                        .ToListAsync();
+
+            // Add ingredients to Meal.Ingredients
+            meal.Ingredients.AddRange(ingredients);
+        }
+
+        private async Task<decimal> GetMealPrice(List<Ingredient> ingredients)
+        {
+            var mealPrice = ingredients.Sum(ingredient => ingredient.Price);
+            var mealPriceWithProfit = mealPrice * 1.4m;
+
+            return mealPriceWithProfit;
+        }
 
         #endregion
     }

@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EN.SuperRestaurant.MVC.Models.Meals
 {
@@ -8,9 +11,13 @@ namespace EN.SuperRestaurant.MVC.Models.Meals
         public string Name { get; set; }
         public string Description { get; set; }
 
-        [Column(TypeName = "decimal(4, 2)")]
-        public decimal Price { get; set; }
-
+        [Display(Name = "Ingredients")]
         public List<int> IngredientIds { get; set; } = [];
+
+
+        // =========== Lookups
+
+        [ValidateNever]
+        public MultiSelectList IngredientLookup { get; set; }
     }
 }
