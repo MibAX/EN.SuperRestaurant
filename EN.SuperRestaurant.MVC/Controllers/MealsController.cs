@@ -44,14 +44,20 @@ namespace EN.SuperRestaurant.MVC.Controllers
                 return NotFound();
             }
 
-            var meal = await _context.Meals
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var meal = await _context
+                                .Meals
+                                .Include(meal => meal.Ingredients)
+                                .Where(meal => meal.Id == id)
+                                .SingleOrDefaultAsync();
+
             if (meal == null)
             {
                 return NotFound();
             }
 
-            return View(meal);
+            var mealVM = _mapper.Map<MealDetailsViewModel>(meal);
+
+            return View(mealVM);
         }
 
         public IActionResult Create()
