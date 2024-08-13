@@ -12,6 +12,13 @@ namespace EN.SuperRestaurant.MVC.AutoMapperProfiles
             CreateMap<Meal, MealDetailsViewModel>();
             
             CreateMap<CreateUpdateMealViewModel, Meal>();
+
+            CreateMap<Meal, CreateUpdateMealViewModel>()
+                .ForMember(createUpdateMealViewModel => createUpdateMealViewModel.IngredientIds,
+                    opts =>
+                        opts.MapFrom(meal => meal.Ingredients.Select(ingredient => ingredient.Id))
+                );
+                
         }
     }
 }
