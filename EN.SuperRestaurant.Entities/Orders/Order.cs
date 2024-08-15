@@ -8,7 +8,7 @@ namespace EN.SuperRestaurant.Entities.Orders
     {
         public int Id { get; set; }
         public DateTime OrderTime { get; set; }
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
         [Column(TypeName = "decimal(4, 2)")]
         public decimal TotalPrice { get; set; }
