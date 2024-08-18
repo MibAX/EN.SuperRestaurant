@@ -4,17 +4,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EN.SuperRestaurant.MVC.Models.Orders
 {
-    public class CreateUpdateOrderViewModel
+    public class UpdateOrderViewModel
     {
         public int Id { get; set; }
         public string? Notes { get; set; }
 
-        [Required]
-        [Display(Name = "Customer")]
-        public int CustomerId { get; set; }
-
         [Display(Name = "Meals")]
-
         [Required]
         public List<int> MealIds { get; set; } = [];
 

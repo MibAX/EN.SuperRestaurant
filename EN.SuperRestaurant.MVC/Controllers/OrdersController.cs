@@ -61,7 +61,7 @@ namespace EN.SuperRestaurant.MVC.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var createUpdateOrderVM = new CreateUpdateOrderViewModel();
+            var createUpdateOrderVM = new CreateOrderViewModel();
 
             createUpdateOrderVM.CustomerLookup = new SelectList(_context.Customers, "Id", "FullName");
             createUpdateOrderVM.MealLookup = new MultiSelectList(_context.Meals, "Id", "Name");
@@ -71,15 +71,15 @@ namespace EN.SuperRestaurant.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateUpdateOrderViewModel createUpdateOrderVM)
+        public async Task<IActionResult> Create(CreateOrderViewModel createOrderVM)
         {
             if (ModelState.IsValid)
             {
-                var order = _mapper.Map<Order>(createUpdateOrderVM);
+                var order = _mapper.Map<Order>(createOrderVM);
 
                 order.OrderTime = DateTime.Now;
 
-                await UpdateOrderMeals(order, createUpdateOrderVM.MealIds);
+                await UpdateOrderMeals(order, createOrderVM.MealIds);
 
                 order.TotalPrice = GetOrderTotalPrice(order.Meals);
 
@@ -89,10 +89,10 @@ namespace EN.SuperRestaurant.MVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            createUpdateOrderVM.CustomerLookup = new SelectList(_context.Customers, "Id", "FullName");
-            createUpdateOrderVM.MealLookup = new MultiSelectList(_context.Meals, "Id", "Name");
+            createOrderVM.CustomerLookup = new SelectList(_context.Customers, "Id", "FullName");
+            createOrderVM.MealLookup = new MultiSelectList(_context.Meals, "Id", "Name");
 
-            return View(createUpdateOrderVM);
+            return View(createOrderVM);
         }
 
         [HttpGet]
@@ -114,19 +114,19 @@ namespace EN.SuperRestaurant.MVC.Controllers
                 return NotFound();
             }
 
-            var orderVM = _mapper.Map<CreateUpdateOrderViewModel>(order);
+            var updateOrderVM = _mapper.Map<UpdateOrderViewModel>(order);
 
-            orderVM.CustomerLookup = new SelectList(_context.Customers, "Id", "FullName");
-            orderVM.MealLookup = new MultiSelectList(_context.Meals, "Id", "Name");
+            updateOrderVM.CustomerLookup = new SelectList(_context.Customers, "Id", "FullName");
+            updateOrderVM.MealLookup = new MultiSelectList(_context.Meals, "Id", "Name");
 
-            return View(orderVM);
+            return View(updateOrderVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CreateUpdateOrderViewModel createUpdateOrderViewModel)
+        public async Task<IActionResult> Edit(int id, UpdateOrderViewModel updateViewModel)
         {
-            if (id != createUpdateOrderViewModel.Id)
+            if (id != updateViewModel.Id)
             {
                 return NotFound();
             }
@@ -146,10 +146,10 @@ namespace EN.SuperRestaurant.MVC.Controllers
                 }
 
                 // Patch the order
-                _mapper.Map(createUpdateOrderViewModel, order);
+                _mapper.Map(updateViewModel, order);
 
                 // Update order meals
-                await UpdateOrderMeals(order, createUpdateOrderViewModel.MealIds);
+                await UpdateOrderMeals(order, updateViewModel.MealIds);
 
                 // Update order total price
                 order.TotalPrice = GetOrderTotalPrice(order.Meals);
@@ -161,7 +161,7 @@ namespace EN.SuperRestaurant.MVC.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(createUpdateOrderViewModel.Id))
+                    if (!OrderExists(updateViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -175,10 +175,10 @@ namespace EN.SuperRestaurant.MVC.Controllers
             }
 
 
-            createUpdateOrderViewModel.CustomerLookup = new SelectList(_context.Customers, "Id", "FullName");
-            createUpdateOrderViewModel.MealLookup = new MultiSelectList(_context.Meals, "Id", "Name");
+            updateViewModel.CustomerLookup = new SelectList(_context.Customers, "Id", "FullName");
+            updateViewModel.MealLookup = new MultiSelectList(_context.Meals, "Id", "Name");
 
-            return View(createUpdateOrderViewModel);
+            return View(updateViewModel);
         }
 
         [HttpPost, ActionName("Delete")]
