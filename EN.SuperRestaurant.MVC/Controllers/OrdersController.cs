@@ -103,26 +103,57 @@ namespace EN.SuperRestaurant.MVC.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context
+                                    .Orders
+                                    .Include(order => order.Meals)
+                                    .Where(order => order.Id == id)
+                                    .SingleOrDefaultAsync();
+
             if (order == null)
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", order.CustomerId);
-            return View(order);
+
+            var orderVM = _mapper.Map<CreateUpdateOrderViewModel>(order);
+
+            orderVM.CustomerLookup = new SelectList(_context.Customers, "Id", "FullName");
+            orderVM.MealLookup = new MultiSelectList(_context.Meals, "Id", "Name");
+
+            return View(orderVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderTime,Notes,TotalPrice,CustomerId")] Order order)
+        public async Task<IActionResult> Edit(int id, CreateUpdateOrderViewModel createUpdateOrderViewModel)
         {
-            if (id != order.Id)
+            if (id != createUpdateOrderViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                // Get the order including meals from the DB
+                var order = await _context
+                                    .Orders
+                                    .Include(order => order.Meals)
+                                    .Where(order => order.Id == id)
+                                    .SingleOrDefaultAsync();
+
+                if (order == null)
+                {
+                    return NotFound();
+                }
+
+                // Patch the order
+                _mapper.Map(createUpdateOrderViewModel, order);
+
+                // Update order meals
+                await UpdateOrderMeals(order, createUpdateOrderViewModel.MealIds);
+
+                // Update order total price
+                order.TotalPrice = GetOrderTotalPrice(order.Meals);
+
                 try
                 {
                     _context.Update(order);
@@ -130,7 +161,7 @@ namespace EN.SuperRestaurant.MVC.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(order.Id))
+                    if (!OrderExists(createUpdateOrderViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -139,10 +170,15 @@ namespace EN.SuperRestaurant.MVC.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", order.CustomerId);
-            return View(order);
+
+
+            createUpdateOrderViewModel.CustomerLookup = new SelectList(_context.Customers, "Id", "FullName");
+            createUpdateOrderViewModel.MealLookup = new MultiSelectList(_context.Meals, "Id", "Name");
+
+            return View(createUpdateOrderViewModel);
         }
 
         [HttpPost, ActionName("Delete")]
