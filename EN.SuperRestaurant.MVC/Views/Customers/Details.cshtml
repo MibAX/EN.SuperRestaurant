@@ -51,7 +51,63 @@
 
     <hr />
     <h5>Orders History</h5>
-    @* TO DO Add the of customer orders *@
+
+    @if (Model.Orders.Count > 0)
+    {
+        <table class="table data-tables">
+            <thead>
+                <tr>
+                    <th class="text-start">
+                        Order Number
+                    </th>
+                    <th>
+                        Order Time
+                    </th>
+                    <th class="text-start">
+                        Total Price
+                    </th>
+                    <th>
+                        Notes
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.Orders)
+                {
+                    <tr>
+                        <td class="text-start">
+                            @Html.DisplayFor(modelItem => order.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => order.OrderTime)
+                        </td>
+                        <td class="text-start">
+                            <span>$</span>@Html.DisplayFor(modelItem => order.TotalPrice)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => order.Notes)
+                        </td>
+                        <td>
+
+                            <a class="text-decoration-none ms-2" asp-controller="Orders" asp-action="Details" asp-route-id="@order.Id" title="Details">
+                                <i class="fa-solid fa-circle-info text-info"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h4 class="fw-bold text-center">@Model.FullName has not placed any orders yet!</h4>
+    }
+
+
 
     <hr />
     <div class="mt-3">

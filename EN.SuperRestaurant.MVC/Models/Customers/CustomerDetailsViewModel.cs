@@ -1,4 +1,5 @@
-﻿using EN.SuperRestaurant.Utils.Enums;
+﻿using EN.SuperRestaurant.MVC.Models.Orders;
+using EN.SuperRestaurant.Utils.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace EN.SuperRestaurant.MVC.Models.Customers
@@ -16,7 +17,6 @@ namespace EN.SuperRestaurant.MVC.Models.Customers
         public Gender Gender { get; set; }
         public int Age { get; set; }
 
-        // TO DO
-        //public List<OrderViewModel> Orders { get; set; }
+        public List<OrderViewModel> Orders { get; set; } = [];
     }
 }

@@ -47,15 +47,21 @@ namespace EN.SuperRestaurant.MVC.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
-                .Include(o => o.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var order = await _context
+                                .Orders
+                                .Include(order => order.Customer)
+                                .Include(order => order.Meals)
+                                .Where(order => order.Id == id)
+                                .SingleOrDefaultAsync();
+
             if (order == null)
             {
                 return NotFound();
             }
 
-            return View(order);
+            var orderDetailsVM = _mapper.Map<OrderDetailsViewModel>(order);
+
+            return View(orderDetailsVM);
         }
 
         [HttpGet]
