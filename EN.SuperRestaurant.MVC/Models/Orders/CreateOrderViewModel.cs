@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using EN.SuperRestaurant.Utils.Enums;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
@@ -18,6 +19,12 @@ namespace EN.SuperRestaurant.MVC.Models.Orders
         [Required]
         public List<int> MealIds { get; set; } = [];
 
+        [Required]
+        [Display(Name = "Payment Method")]
+        public PaymentMethod PaymentMethod { get; set; }
+
+        [Display(Name = "Paid")]
+        public bool IsPaid { get; set; }
 
         // ######### Lookups
 

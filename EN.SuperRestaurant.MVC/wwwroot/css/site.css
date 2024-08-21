@@ -72,3 +72,11 @@ body {
     border-color: #dee2e6 !important;
 }
 /*#endregion */
+
+.color-paypal {
+    color: #3243a9 !important;
+}
+
+.color-bitcoin {
+    color: #f79413 !important;
+}

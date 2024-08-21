@@ -1,4 +1,5 @@
 ﻿using EN.SuperRestaurant.MVC.Models.Meals;
+using EN.SuperRestaurant.Utils.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,5 +24,11 @@ namespace EN.SuperRestaurant.MVC.Models.Orders
         public string CustomerAddress { get; set; }
 
         public List<MealViewModel> Meals { get; set; } = [];
+
+        [Display(Name = "Payment Method")]
+        public PaymentMethod PaymentMethod { get; set; }
+
+        [Display(Name = "Paid")]
+        public bool IsPaid { get; set; }
     }
 }
