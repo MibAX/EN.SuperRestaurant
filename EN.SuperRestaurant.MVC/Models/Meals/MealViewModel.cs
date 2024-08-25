@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EN.SuperRestaurant.MVC.Models.Meals
 {
@@ -10,5 +11,8 @@ namespace EN.SuperRestaurant.MVC.Models.Meals
 
         [Column(TypeName = "decimal(4, 2)")]
         public decimal Price { get; set; }
+
+        [Display(Name = "Image")]
+        public string? ImageName { get; set; }
     }
 }

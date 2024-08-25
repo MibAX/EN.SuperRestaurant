@@ -102,45 +102,32 @@
 
     <h4>Order Meals</h4>
 
-    <table class="table table-hover table-striped data-tables">
-        <thead>
-            <tr>
-                <th>
-                    Order Number
-                </th>
-                <th>
-                    Description
-                </th>
-                <th class="text-start">
-                    Price
-                </th>
-                <th>
-                    Actions
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var meal in Model.Meals)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => meal.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => meal.Description)
-                    </td>
-                    <td class="text-start">
-                        <span>$</span>@Html.DisplayFor(modelItem => meal.Price)
-                    </td>
-                    <td>
-                        <a class="text-decoration-none ms-2" asp-controller="Meals" asp-action="Details" asp-route-id="@meal.Id" title="Details">
-                            <i class="fa-solid fa-circle-info text-info"></i>
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="row">
+
+        @foreach (var meal in Model.Meals)
+        {
+            <div class="col-lg-4 col-md-6">
+
+                <div class="meal">
+
+                    <div class="card">
+                        <img src="~/imgs/meals/@meal.ImageName" class="card-img-top" alt="@meal.Name">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a class="text-decoration-none title" asp-controller="Meals" asp-action="Details" asp-route-id="@meal.Id" title="Details">
+                                    @meal.Name
+                                </a>
+                            </h5>
+                            <p class="card-text">@meal.Description</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
 
     <div class="mt-4">
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
