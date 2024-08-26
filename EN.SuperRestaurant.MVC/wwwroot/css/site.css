@@ -84,3 +84,31 @@ body {
 .meal .title {
     color: #d58534 !important;
 }
+
+.bg-section {
+    background-color: #fef5f5;
+}
+
+.border-section {
+    border-bottom: 1px solid #fce8df;
+}
+
+.title-text {
+    color: #55413b;
+}
+
+.sub-title-text {
+    color: #948279
+}
+
+.bg-cus-primary {
+    background-color: #ba151c;
+}
+
+.btn-hero {
+    background-color: #ba151c !important;
+    color: #fff !important;
+    font-weight: 600;
+    letter-spacing: 0.05rem;
+    padding-inline: 1.5rem;
+}
