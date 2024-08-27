@@ -113,6 +113,13 @@ body {
     padding-inline: 1.5rem;
 }
 
+.btn-cus-primary {
+    background-color: #ba151c !important;
+    color: #fff !important;
+    font-weight: 600;
+    letter-spacing: 0.05rem;
+}
+
 .section-title {
     color: #C2B7B1;
     text-align: center;
