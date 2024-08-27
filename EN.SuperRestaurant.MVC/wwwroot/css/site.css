@@ -145,3 +145,9 @@ body {
     .service-card .text {
         margin-top: 1rem;
     }
+
+.accordion-button {
+    background: #f7f7f7 !important;
+    color: #ba151c !important;
+    font-weight: 600;
+}
