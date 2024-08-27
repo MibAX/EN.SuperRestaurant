@@ -124,3 +124,24 @@ body {
     text-align: center;
     font-weight: bold;
 }
+
+.service-card {
+    text-align: center;
+    background: #fff;
+    border-radius: 5px;
+    padding: 2rem 1rem 1rem;
+}
+
+    .service-card .icon i {
+        color: #ba151c;
+        font-size: 2rem;
+    }
+
+    .service-card .title {
+        margin-top: 1rem;
+        font-weight: bold;
+    }
+
+    .service-card .text {
+        margin-top: 1rem;
+    }
