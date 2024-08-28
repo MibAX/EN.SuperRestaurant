@@ -1,4 +1,6 @@
-﻿@{
+﻿@using EN.SuperRestaurant.MVC.Models.Homes
+@model HomePageViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -98,7 +100,7 @@
 
             </div>
             <div class="col-lg-3 col-md-6">
-                
+
                 <div class="service-card">
 
                     <div class="icon">
@@ -142,6 +144,64 @@
                 </div>
 
             </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="ourCustomers" class="container py-5">
+
+    <h4 class="section-title mb-1">Our Customers</h4>
+    <h2 class="section-sub-title mb-5">Our Customers Trust our Products and Services</h2>
+
+    <div class="row g-3">
+
+        @foreach (var customerFullName in Model.OurCustomers)
+        {
+            <div class="col-lg-4">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">@customerFullName</h3>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+<div id="ourBestMeals" class="bg-section mt-3">
+
+    <div class="container py-5">
+
+        <h4 class="section-title mb-1">Our Best Meals</h4>
+        <h2 class="section-sub-title mb-5">Our best sold meals that our clients love and come back for</h2>
+
+        <div class="slick-slider">
+
+            @foreach (var meal in Model.BestSoldMeals)
+            {
+                <div class="card">
+                    <img src="~/imgs/meals/@meal.ImageName" class="card-img-top" alt="@meal.Name">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a class="text-decoration-none title" asp-controller="Meals" asp-action="Details" asp-route-id="@meal.Id" title="Details">
+                                @meal.Name
+                            </a>
+                        </h5>
+                        <p class="card-text">@meal.Description</p>
+                    </div>
+                </div>
+            }
+
         </div>
 
     </div>
@@ -197,13 +257,13 @@
 <div id="newsletter" class="bg-section mt-3">
 
     <div class="container py-5">
-        
+
         <h2 class="section-sub-title mb-2 fw-normal">Join Our Newsletter</h2>
         <p class="text-center">laso tedx on the askli in the maaik laso tedx on the askli</p>
 
         <div class="row">
             <div class="offset-lg-3 col-lg-6">
-                
+
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Enter Your Email" aria-label="Recipient's username" aria-describedby="button-addon2">
                     <button class="btn btn-cus-primary" type="button" id="button-addon2">Subscribe</button>

@@ -17,10 +17,6 @@ html {
     min-height: 100%;
 }
 
-body {
-    margin-bottom: 60px;
-}
-
 /*#region Data Tables Overrides */
 
 .dt-input {
@@ -72,6 +68,11 @@ body {
     border-color: #dee2e6 !important;
 }
 /*#endregion */
+
+a {
+    color: #ba151c;
+    text-decoration: none;
+}
 
 .color-paypal {
     color: #3243a9 !important;
@@ -157,4 +158,46 @@ body {
     background: #f7f7f7 !important;
     color: #ba151c !important;
     font-weight: 600;
+}
+
+.fs-7 {
+    font-size: 0.85rem !important;
+}
+
+.social-links .social-link {
+    width: 40px;
+    height: 40px;
+    background-color: #ba151c;
+    text-align: center;
+    font-size: 1.4rem;
+    padding-top: 0.2rem !important;
+}
+
+
+
+.back-to-top {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: #ba151c;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 1.5rem;
+}
+
+    .back-to-top a {
+        color: #fff;
+        display: block;
+        width: 46px;
+        height: 46px;
+        padding-top: 4px;
+    }
+
+    .back-to-top:hover a {
+        background: #9a151c;
+    }
+
+.slick-slide {
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
